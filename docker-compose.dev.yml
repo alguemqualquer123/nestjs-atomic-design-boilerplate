@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Development environment
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: nestjs-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - nestjs-dev-network
+
+  redis-dev:
+    image: redis:7-alpine
+    container_name: nestjs-redis-dev
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - nestjs-dev-network
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
+
+networks:
+  nestjs-dev-network:
+    driver: bridge
